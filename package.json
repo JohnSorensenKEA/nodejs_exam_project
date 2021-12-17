@@ -1,0 +1,35 @@
+{
+  "name": "nodejs_exam_project",
+  "version": "0.0.1",
+  "description": "Exam project for elective course 'fullstack Node.js'",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JohnSorensenKEA/nodejs_exam_project"
+  },
+  "keywords": [
+    "Node.js",
+    "HTML",
+    "CSS",
+    "EXPRESS"
+  ],
+  "author": "John",
+  "license": "",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemailer": "^6.7.0",
+    "bcrypt": "^5.0.1",
+    "express-rate-limit": "^5.5.1",
+    "express-session": "^1.17.2",
+    "helmet": "^4.6.0",
+    "sqlite": "^4.0.23",
+    "sqlite3": "^5.0.2"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
+}
