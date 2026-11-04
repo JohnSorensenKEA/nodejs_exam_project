@@ -57,14 +57,14 @@ io.on("connection",  (socket) => {
 /* Page render function */
 import createPage from "./render.js";
 
+/* Utility import and use */
+import escapeHTML from "./util/escapeHTML.js";
+
 /* Router import and use */
 import chatRouter from "./routers/chat.js";
 import pinboardRouter from "./routers/pinboard.js";
 import usersRouter from "./routers/users.js";
 import emailRouter from "./routers/email.js";
-
-/* Utility import and use */
-import escapeHTML from "./util/escapeHTML.js";
 
 app.use(chatRouter);
 app.use(pinboardRouter);
