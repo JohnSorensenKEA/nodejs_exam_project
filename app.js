@@ -109,29 +109,33 @@ app.get("/", (req, res) => {
 app.get("/chat", (req, res) => {
     if(!req.userAuth) {
         res.redirect("/login");
+    } else {
+        res.send(chatPage); 
     }
-    res.send(chatPage);
 });
 
 app.get("/pinboard", (req, res) => {
     if(!req.userAuth) {
         res.redirect("/login");
+    } else {
+        res.send(pinboardPage);
     }
-    res.send(pinboardPage);
 });
 
 app.get("/login", (req, res) => {
     if(req.userAuth) {
         res.redirect("/pinboard");
+    } else {
+        res.send(loginPage);
     }
-    res.send(loginPage);
 });
 
 app.get("/email", (req, res) => {
     if(!req.userAuth) {
         res.redirect("/login");
+    } else {
+        res.send(emailPage);
     }
-    res.send(emailPage);
 });
 
 /* Server port setting */
