@@ -37,6 +37,7 @@ app.use(sessionToUserId);
 /* Socket handling */
 import http from "http";
 const server = http.createServer(app);
+server.listen(process.env.PORT || 8080); //Specify http server port
 
 import { Server } from "socket.io";
 const io = new Server(server);
