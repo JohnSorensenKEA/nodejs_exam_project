@@ -21,11 +21,11 @@ router.post("/loginRequest", async (req, res) => {
             req.userMap.set(req.session.id, users[0].id);
             res.status(200).send({message: "Login was successful, redirecting", status: 200});
         }else{
-            res.status(401).send({message: "Incorrect password", status: 401});
+            res.status(401).send({message: "Incorrect username or password", status: 401});
         }
 
     }else{
-        res.status(401).send({message: "Could not find account matching username", status: 401});
+        res.status(401).send({message: "Incorrect username or password", status: 401});
     }
 });
 
@@ -41,7 +41,7 @@ router.post("/devCreateUser", async (req, res) => {
     res.status(201).send({ message: `Added username '${req.body.userDetail.username}'` });
 });*/
 
-router.get("/logout", (req, res) => {
+router.get("/logout", (req, res) => { //TODO: Change to POST request - as it changes server state
     const result = req.userMap.delete(req.session.id);
     if(result){
         res.status(200).send({message: "Successfully logged out"});
