@@ -51,7 +51,7 @@ server.listen(process.env.PORT || 8080); //Specify http server port
 import { Server } from "socket.io";
 const io = new Server(server);
 
-import { createConnection } from "/Users/John/Google Drev/Datamatiker/NodeJS_fag/node_git/nodejs_exam_project/database/connectSqlite.js";
+import { createConnection } from "../nodejs_exam_project/database/connectSqlite.js";
 
 io.on("connection", (socket) => {
     console.log("A new  socket connected with id", socket.id);
