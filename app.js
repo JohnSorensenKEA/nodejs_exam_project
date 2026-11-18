@@ -18,17 +18,19 @@ import helmet from "helmet";
 app.use(helmet());
 
 import session from "express-session";
-app.use(session({
-    secret: 'Blobfish are great',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }
-}));
+app.use(
+    session({
+        secret: "Blobfish are great",
+        resave: false,
+        saveUninitialized: true,
+        cookie: { secure: false },
+    }),
+);
 
 import rateLimit from "express-rate-limit";
 const rateLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100
+    max: 100,
 });
 app.use(rateLimiter);
 
@@ -51,11 +53,15 @@ const io = new Server(server);
 
 import { createConnection } from "/Users/John/Google Drev/Datamatiker/NodeJS_fag/node_git/nodejs_exam_project/database/connectSqlite.js";
 
-io.on("connection",  (socket) => {
-    socket.on("chat message", async (message) => {
+io.on("connection", (socket) => {
+    console.log("A new  socket connected with id", socket.id);
 
+    socket.on("chat message", async (message) => {
         const connection = await createConnection();
-        await connection.run(`INSERT INTO messages ('text', 'user_id') VALUES (?, ?)`, [message.message, message.id]);
+        await connection.run(
+            `INSERT INTO messages ('text', 'user_id') VALUES (?, ?)`,
+            [message.message, message.id],
+        );
         connection.close();
 
         io.emit("new message", {
@@ -83,33 +89,33 @@ app.use(usersRouter);
 app.use(emailRouter);
 
 /* Ready the pages */
-const frontpagePage = createPage("front/frontpage.html", { 
+const frontpagePage = createPage("front/frontpage.html", {
     title: "Community | Welcome",
-    scriptTag: `<script></script>`
+    scriptTag: `<script></script>`,
 });
 
-const chatPage = createPage("chat/chatpage.html", { 
+const chatPage = createPage("chat/chatpage.html", {
     title: "Community | Chat",
     scriptTag: `<script src="../pages/chat/chatpage.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
         var socket = io();
-    </script>`
+    </script>`,
 });
 
-const pinboardPage = createPage("pinboard/pinboardpage.html", { 
+const pinboardPage = createPage("pinboard/pinboardpage.html", {
     title: "Community | Pinboard",
-    scriptTag: `<script src="../pages/pinboard/pinboardpage.js"></script>`
+    scriptTag: `<script src="../pages/pinboard/pinboardpage.js"></script>`,
 });
 
-const loginPage = createPage("login/loginpage.html", { 
+const loginPage = createPage("login/loginpage.html", {
     title: "Community | Login",
-    scriptTag: `<script src="../pages/login/loginpage.js"></script>`
+    scriptTag: `<script src="../pages/login/loginpage.js"></script>`,
 });
 
 const emailPage = createPage("email/emailpage.html", {
     title: "Community | Email",
-    scriptTag: `<script src="../pages/email/emailpage.js"></script>`
+    scriptTag: `<script src="../pages/email/emailpage.js"></script>`,
 });
 
 /* Site endpoints */
@@ -118,15 +124,15 @@ app.get("/", (req, res) => {
 });
 
 app.get("/chat", (req, res) => {
-    if(!req.userAuth) {
+    if (!req.userAuth) {
         res.redirect("/login");
     } else {
-        res.send(chatPage); 
+        res.send(chatPage);
     }
 });
 
 app.get("/pinboard", (req, res) => {
-    if(!req.userAuth) {
+    if (!req.userAuth) {
         res.redirect("/login");
     } else {
         res.send(pinboardPage);
@@ -134,7 +140,7 @@ app.get("/pinboard", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-    if(req.userAuth) {
+    if (req.userAuth) {
         res.redirect("/pinboard");
     } else {
         res.send(loginPage);
@@ -142,7 +148,7 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/email", (req, res) => {
-    if(!req.userAuth) {
+    if (!req.userAuth) {
         res.redirect("/login");
     } else {
         res.send(emailPage);
