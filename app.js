@@ -51,11 +51,9 @@ server.listen(process.env.PORT || 8080); //Specify http server port
 import { Server } from "socket.io";
 const io = new Server(server);
 
-import { createConnection } from "../nodejs_exam_project/database/connectSqlite.js";
+import { createConnection } from "./database/connectSqlite.js";
 
 io.on("connection", (socket) => {
-    console.log("A new  socket connected with id", socket.id);
-
     socket.on("chat message", async (message) => {
         const connection = await createConnection();
         await connection.run(
