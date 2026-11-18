@@ -58,7 +58,10 @@ io.on("connection",  (socket) => {
         await connection.run(`INSERT INTO messages ('text', 'user_id') VALUES (?, ?)`, [message.message, message.id]);
         connection.close();
 
-        io.emit("new message", {message: escapeHTML(message.message), id: escapeHTML(message.id)});
+        io.emit("new message", {
+            message: escapeHTML(message.message),
+            id: Number(message.id),
+        }); //TODO Clean up user input
     });
 });
 
