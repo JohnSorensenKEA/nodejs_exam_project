@@ -12,5 +12,5 @@ async function checkPassword(password, hashedPassword) {
 
 export default {
     hashPassword,
-    checkPassword
+    checkPassword,
 };
