@@ -7,18 +7,18 @@ import escapeHTML from "../util/escapeHTML.js";
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
-        user: 'pedersenb313@gmail.com', // Unused email...
-        pass: '\`]c+GhyNr\'8uXw3\/' // `]c+GhyNr'8uXw3/
-    }
+        user: "pedersenb313@gmail.com", // Unused email...
+        pass: "\`]c+GhyNr'8uXw3\/", // `]c+GhyNr'8uXw3/
+    },
 });
 
 const mailOptions = {
-    from: 'pedersenb313@gmail.com',
-    to: 'pedersenb313@gmail.com',
-    subject: '',
-    text: ''
+    from: "pedersenb313@gmail.com",
+    to: "pedersenb313@gmail.com",
+    subject: "",
+    text: "",
 };
 
 /* Endpoints */

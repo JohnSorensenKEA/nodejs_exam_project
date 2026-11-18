@@ -11,21 +11,35 @@ router.get("/checkLoggedIn", (req, res) => {
 
 router.post("/loginRequest", async (req, res) => {
     const connection = await createConnection();
-    const users = await connection.all(`SELECT * FROM users WHERE username = ?`, [req.body.userDetail.username]);
+    const users = await connection.all(
+        `SELECT * FROM users WHERE username = ?`,
+        [req.body.userDetail.username],
+    );
     connection.close();
 
-    if(users.length === 1){
-        const result = await encryption.checkPassword(req.body.userDetail.password, users[0].password);
-        
-        if(result){
-            req.userMap.set(req.session.id, users[0].id);
-            res.status(200).send({message: "Login was successful, redirecting", status: 200});
-        }else{
-            res.status(401).send({message: "Incorrect username or password", status: 401});
-        }
+    if (users.length === 1) {
+        const result = await encryption.checkPassword(
+            req.body.userDetail.password,
+            users[0].password,
+        );
 
-    }else{
-        res.status(401).send({message: "Incorrect username or password", status: 401});
+        if (result) {
+            req.userMap.set(req.session.id, users[0].id);
+            res.status(200).send({
+                message: "Login was successful, redirecting",
+                status: 200,
+            });
+        } else {
+            res.status(401).send({
+                message: "Incorrect username or password",
+                status: 401,
+            });
+        }
+    } else {
+        res.status(401).send({
+            message: "Incorrect username or password",
+            status: 401,
+        });
     }
 });
 
@@ -41,12 +55,15 @@ router.post("/devCreateUser", async (req, res) => {
     res.status(201).send({ message: `Added username '${req.body.userDetail.username}'` });
 });*/
 
-router.get("/logout", (req, res) => { //TODO: Change to POST request - as it changes server state
+router.get("/logout", (req, res) => {
+    //TODO: Change to POST request - as it changes server state
     const result = req.userMap.delete(req.session.id);
-    if(result){
-        res.status(200).send({message: "Successfully logged out"});
-    }else{
-        res.status(400).send({message: "Could not find user or not logged in"});
+    if (result) {
+        res.status(200).send({ message: "Successfully logged out" });
+    } else {
+        res.status(400).send({
+            message: "Could not find user or not logged in",
+        });
     }
 });
 
