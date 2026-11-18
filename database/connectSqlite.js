@@ -6,13 +6,13 @@ export let connection;
 (async () => {
     connection = await open({
         filename: "./community.db",
-        driver: sqlite3.Database
+        driver: sqlite3.Database,
     });
 })();
 
 export async function createConnection() {
     return await open({
         filename: "./community.db",
-        driver: sqlite3.Database
+        driver: sqlite3.Database,
     });
 }
