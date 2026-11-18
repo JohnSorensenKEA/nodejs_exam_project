@@ -7,6 +7,13 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+import cors from "cors";
+app.use(
+    cors({
+        origin: ["http://localhost:8080"],
+    }),
+);
+
 import helmet from "helmet";
 app.use(helmet());
 
