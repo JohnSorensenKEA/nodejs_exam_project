@@ -53,19 +53,49 @@ const io = new Server(server);
 
 import { createConnection } from "./database/connectSqlite.js";
 
+//io.use()
+
 io.on("connection", (socket) => {
     socket.on("chat message", async (message) => {
+        /*
+        const sessionSocketId = await new Promise((resolve, reject) =>
+            session(
+                {
+                    secret: "Blobfish are great",
+                    saveUninitialized: true,
+                    cookie: { secure: false },
+                    headers: socket.handshake.headers,
+                },
+                resolve,
+            ),
+        );
+
+        console.log(sessionSocketId);
+        */
         const connection = await createConnection();
-        await connection.run(
-            `INSERT INTO messages ('text', 'user_id') VALUES (?, ?)`,
-            [message.message, message.id],
+
+        //console.log("socket session id: " + message.sessionId);
+        //console.log(loggedInUserMap.get(message.sessionId));
+
+        const insertedMessage = await connection.all(
+            `INSERT INTO messages ('text', 'user_id') VALUES (?, ?)
+            RETURNING *`,
+            [escapeHTML(message.message.toString()), 1], //loggedInUserMap.get(message.sessionId)],
+        );
+        const newMessage = await connection.all(
+            `SELECT m.text, m.created_at, u.username
+            FROM messages m
+            JOIN users u ON m.user_id = u.id
+            WHERE m.id = ?`,
+            [insertedMessage[0].id],
         );
         connection.close();
 
         io.emit("new message", {
-            message: escapeHTML(message.message),
-            id: Number(message.id),
-        }); //TODO Clean up user input
+            message: newMessage[0].text,
+            username: newMessage[0].username,
+            created_at: newMessage[0].created_at,
+        });
     });
 });
 

@@ -13,25 +13,17 @@ async function init2() {
         .then((response) => response.json())
         .then((data) => {
             data.forEach((element) => {
-                const divEl = document.createElement("div");
-                const nameP = document.createElement("P");
-                const messageP = document.createElement("p");
-                nameP.className = "name-p";
-                messageP.className = "message-p";
-
-                messageP.innerText = element.text;
-
-                for (let i = 0; i < data.length; i++) {
-                    if (data[i].id === element.id) {
-                        nameP.innerText = data[i].username;
-                    }
-                }
-
-                divEl.appendChild(nameP);
-                divEl.appendChild(messageP);
-
-                container.appendChild(divEl);
+                container.appendChild(
+                    createMessageDiv(
+                        element.username,
+                        element.text,
+                        element.created_at,
+                    ),
+                );
             });
+        })
+        .then(() => {
+            container.scrollTop = container.scrollHeight;
         });
 
     const socket = io();
@@ -42,29 +34,42 @@ async function init2() {
     form.addEventListener("submit", function (e) {
         e.preventDefault();
         if (input.value) {
-            socket.emit("chat message", { message: input.value, id: 0 });
+            socket.emit("chat message", {
+                message: input.value,
+                sessionId: socket.sessionid,
+            });
             input.value = "";
         }
     });
 
     socket.on("new message", (message) => {
-        const divEl = document.createElement("div");
-        const nameP = document.createElement("P");
-        const messageP = document.createElement("p");
-        nameP.className = "name-p";
-        messageP.className = "message-p";
-
-        messageP.innerText = message.message;
-
-        for (let i = 0; i < data.length; i++) {
-            if (data[i].id === message.id) {
-                nameP.innerText = data[i].username;
-            }
-        }
-
-        divEl.appendChild(nameP);
-        divEl.appendChild(messageP);
-
-        container.appendChild(divEl);
+        container.appendChild(
+            createMessageDiv(
+                message.username,
+                message.message,
+                message.created_at,
+            ),
+        );
     });
+}
+
+function createMessageDiv(name, message, time) {
+    const divEl = document.createElement("div");
+    const nameP = document.createElement("p");
+    const messageP = document.createElement("p");
+    const timeP = document.createElement("p");
+
+    nameP.className = "name-p";
+    messageP.className = "message-p";
+    timeP.className = "time-p";
+
+    messageP.innerText = message;
+    nameP.innerText = name;
+    timeP.innerText = time;
+
+    divEl.appendChild(nameP);
+    divEl.appendChild(messageP);
+    divEl.appendChild(timeP);
+
+    return divEl;
 }
