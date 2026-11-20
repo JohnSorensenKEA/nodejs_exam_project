@@ -63,5 +63,13 @@ html {
     padding-top: 1px;
     font-size: large;
     margin-bottom: 5px;
-    background-color: rgb(137, 255, 137);
+    background-color: rgb(211, 211, 211);
+}
+.time-p {
+    margin-top: 0px;
+    margin-bottom: 1px;
+    padding-top: 0px;
+    color: rgb(152, 152, 152);
+    font-size: small;
+    align-self: flex-end;
 }
