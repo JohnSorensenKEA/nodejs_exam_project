@@ -11,7 +11,7 @@ const footer = fs.readFileSync(
     "utf8",
 );
 
-function createPage(path, options = { title: "Nodefolio" }) {
+function createPage(path, options = { title: "Community" }) {
     return (
         nav +
         fs.readFileSync(appDir + `/public/pages/${path}`, "utf8") +
