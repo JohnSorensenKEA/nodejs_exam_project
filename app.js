@@ -127,7 +127,7 @@ const loginPage = createPage("login/loginpage.html", {
 
 const emailPage = createPage("email/emailpage.html", {
     title: "Community | Email",
-    scriptTag: `<script src="../pages/email/emailpage.js"></script>`,
+    scriptTag: `<script src="../pages/email/emailpage.js" defer></script>`,
 });
 
 const fileManagerPage = createPage("files_manager/filesmanagerpage.html", {
