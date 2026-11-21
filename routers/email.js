@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 import express from "express";
 const router = express.Router();
 
@@ -7,16 +9,17 @@ import escapeHTML from "../util/escapeHTML.js";
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
     auth: {
-        user: "pedersenb313@gmail.com", // Unused email...
-        pass: "\`]c+GhyNr'8uXw3\/", // `]c+GhyNr'8uXw3/
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
     },
 });
 
 const mailOptions = {
-    from: "pedersenb313@gmail.com",
-    to: "pedersenb313@gmail.com",
+    from: process.env.EMAIL_USER,
+    to: process.env.EMAIL_USER,
     subject: "",
     text: "",
 };
@@ -26,22 +29,19 @@ router.post("/api/contact", (req, res) => {
     //TODO: get users, loop through and send
     mailOptions.subject = `${escapeHTML(req.body.title)}`;
 
-    mailOptions.text = `Name: ${escapeHTML(req.body.message)}
+    mailOptions.text = `Name: test
         ${escapeHTML(req.body.message)}
 
         ${Date()}
     `;
 
-    /*
-    transporter.sendMail(mailOptions, function(error, info){
+    transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.log(error);
         } else {
-            console.log('Email sent: ' + info.response);
+            console.log("Email sent: " + info.response);
         }
-    });*/
-
-    console.log(req.body);
+    });
 
     res.sendStatus(200);
 });
