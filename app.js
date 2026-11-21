@@ -18,14 +18,13 @@ import helmet from "helmet";
 app.use(helmet());
 
 import session from "express-session";
-app.use(
-    session({
-        secret: "Blobfish are great",
-        resave: false,
-        saveUninitialized: true,
-        cookie: { secure: false },
-    }),
-);
+const sessionMiddleware = session({
+    secret: "Blobfish are great",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+});
+app.use(sessionMiddleware);
 
 import rateLimit from "express-rate-limit";
 const rateLimiter = rateLimit({
@@ -51,36 +50,21 @@ server.listen(process.env.PORT || 8080); //Specify http server port
 import { Server } from "socket.io";
 const io = new Server(server);
 
-import { createConnection } from "./database/connectSqlite.js";
+io.engine.use(sessionMiddleware);
 
-//io.use()
+import { createConnection } from "./database/connectSqlite.js";
 
 io.on("connection", (socket) => {
     socket.on("chat message", async (message) => {
-        /*
-        const sessionSocketId = await new Promise((resolve, reject) =>
-            session(
-                {
-                    secret: "Blobfish are great",
-                    saveUninitialized: true,
-                    cookie: { secure: false },
-                    headers: socket.handshake.headers,
-                },
-                resolve,
-            ),
-        );
-
-        console.log(sessionSocketId);
-        */
         const connection = await createConnection();
-
-        //console.log("socket session id: " + message.sessionId);
-        //console.log(loggedInUserMap.get(message.sessionId));
 
         const insertedMessage = await connection.all(
             `INSERT INTO messages ('text', 'user_id') VALUES (?, ?)
             RETURNING *`,
-            [escapeHTML(message.message.toString()), 1], //loggedInUserMap.get(message.sessionId)],
+            [
+                escapeHTML(message.message.toString()),
+                loggedInUserMap.get(socket.request.session.id),
+            ],
         );
         const newMessage = await connection.all(
             `SELECT m.text, m.created_at, u.username
@@ -149,12 +133,12 @@ const emailPage = createPage("email/emailpage.html", {
 const fileManagerPage = createPage("files_manager/filesmanagerpage.html", {
     title: "Community | Files",
     scriptTag: `<script src="../pages/files_manager/filesmanagerpage.js"></script>`,
-})
+});
 
 const requestsPage = createPage("requests/requestspage.html", {
     title: "Community | Files",
     scriptTag: `<script src="../pages/requests/requestspage.js"></script>`,
-})
+});
 
 /* Site endpoints */
 app.get("/", (req, res) => {
