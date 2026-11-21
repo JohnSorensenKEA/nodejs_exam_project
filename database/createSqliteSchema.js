@@ -22,6 +22,7 @@ import { createConnection } from "./connectSqlite.js";
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             text TEXT NOT NULL,
             user_id INTEGER NOT NULL,
+            created_at TEXT NOT NULL DEFAULT (datetime('now')),
             FOREIGN KEY (user_id)
                 REFERENCES users (id)
                     ON DELETE CASCADE
