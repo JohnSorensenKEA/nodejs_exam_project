@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 /* #Setting Express */
 import express from "express";
 const app = express();
@@ -19,7 +21,7 @@ app.use(helmet());
 
 import session from "express-session";
 const sessionMiddleware = session({
-    secret: "Blobfish are great",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false },
@@ -197,5 +199,5 @@ app.get("/requests", (req, res) => {
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, (error) => {
-    console.log("Server is running on", PORT);
+    console.log("Server is running on port:", PORT);
 });
