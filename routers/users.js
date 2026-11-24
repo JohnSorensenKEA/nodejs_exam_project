@@ -55,7 +55,7 @@ router.post("/devCreateUser", async (req, res) => {
     res.status(201).send({ message: `Added username '${req.body.userDetail.username}'` });
 });*/
 
-router.get("/logout", (req, res) => {
+router.post("/logout", (req, res) => {
     //TODO: Change to POST request - as it changes server state
     const result = req.userMap.delete(req.session.id);
     if (result) {
@@ -69,7 +69,7 @@ router.get("/logout", (req, res) => {
 
 router.get("/getUserProfiles", async (req, res) => {
     const connection = await createConnection();
-    const users = await connection.all(`SELECT id, username FROM users`);
+    const users = await connection.all(`SELECT id, username, email, member_number FROM users`);
     connection.close();
 
     res.send(users);
