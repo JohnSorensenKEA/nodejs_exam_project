@@ -96,11 +96,13 @@ import chatRouter from "./routers/chat.js";
 import pinboardRouter from "./routers/pinboard.js";
 import usersRouter from "./routers/users.js";
 import emailRouter from "./routers/email.js";
+import requestsRouter from "./routers/requests.js"
 
 app.use(chatRouter);
 app.use(pinboardRouter);
 app.use(usersRouter);
 app.use(emailRouter);
+app.use(requestsRouter);
 
 /* Ready the pages */
 const frontpagePage = createPage("front/frontpage.html", {
@@ -148,8 +150,13 @@ const fileManagerPage = createPage("files_manager/filesmanagerpage.html", {
 });
 
 const requestsPage = createPage("requests/requestspage.html", {
-    title: "Community | Files",
+    title: "Community | Requests",
     scriptTag: `<script src="../pages/requests/requestspage.js"></script>`,
+});
+
+const requestsFormPage = createPage("requests/requestsformpage.html", {
+    title: "Community | Form",
+    scriptTag: `<script src="../pages/requests/requestsformpage.js" defer></script>`,
 });
 
 /* Site endpoints */
@@ -219,6 +226,10 @@ app.get("/requests", (req, res) => {
     } else {
         res.send(requestsPage);
     }
+});
+
+app.get("/form", (req, res) => {
+    res.send(requestsFormPage);
 });
 
 /* Server port setting */
