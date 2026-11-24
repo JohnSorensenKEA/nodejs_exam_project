@@ -37,7 +37,7 @@ router.get("/api/email/getEmails", async (req, res) => {
 router.get("/api/email/getEmail/:id", async (req, res) => {
     const connection = await createConnection();
 
-    email = await connection.get(
+    const email = await connection.get(
         `SELECT e.id, e.subject, e.body, e.system_message, e.created_at, COUNT(ue.email_id) AS reference_count 
         FROM emails e
         LEFT JOIN user_emails ue ON ue.email_id = e.id
@@ -45,11 +45,26 @@ router.get("/api/email/getEmail/:id", async (req, res) => {
         GROUP BY e.id`,
         [req.params.id],
     );
+    email.system_message = escapeHTML(email.system_message); //system_message frontend conversion issue fix
     connection.close();
     res.status(200).send(email);
 });
 
-router.post("/api/contact", async (req, res) => {
+router.get("/api/email/getRecipients/:id", async (req, res) => {
+    const connection = await createConnection();
+
+    const email = await connection.all(
+        `SELECT u.username, u.email, u.member_number 
+        FROM user_emails ue
+        LEFT JOIN users u ON u.id = ue.user_id
+        WHERE ue.email_id = ?`,
+        [req.params.id],
+    );
+    connection.close();
+    res.status(200).send(email);
+});
+
+router.post("/api/email/newEmail", async (req, res) => {
     res.status(201);
     const connection = await createConnection();
     let systemMessage = "[system: email]";
