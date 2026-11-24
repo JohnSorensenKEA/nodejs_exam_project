@@ -26,6 +26,7 @@ const mailOptions = {
 
 /* Endpoints */
 router.post("/api/contact", (req, res) => {
+    //TODO: Insert email in db
     //TODO: get users, loop through and send
     mailOptions.subject = `${escapeHTML(req.body.title)}`;
 
@@ -34,16 +35,21 @@ router.post("/api/contact", (req, res) => {
 
         ${Date()}
     `;
+    res.status(201);
 
+    let systemMessage = "";
     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
-            console.log(error);
+            res.status(503);
+            //TODO: Add error line
         } else {
-            console.log("Email sent: " + info.response);
+            //TODO: Add success line
+            //TODO: Add user email relation to db
+            //console.log("Email sent: " + info.response);
         }
     });
 
-    res.sendStatus(200);
+    res.send();
 });
 
 /* Module exports */
