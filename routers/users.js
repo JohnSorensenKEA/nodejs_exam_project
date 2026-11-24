@@ -9,6 +9,16 @@ router.get("/checkLoggedIn", (req, res) => {
     res.send(req.userAuth);
 });
 
+router.get("/getUserProfiles", async (req, res) => {
+    const connection = await createConnection();
+    const users = await connection.all(
+        `SELECT id, username, email, member_number FROM users`,
+    );
+    connection.close();
+
+    res.send(users);
+});
+
 router.post("/loginRequest", async (req, res) => {
     const connection = await createConnection();
     const users = await connection.all(
@@ -43,20 +53,7 @@ router.post("/loginRequest", async (req, res) => {
     }
 });
 
-/*
-//Hans: 1111, Bob: 2222, Ib: 3333
-router.post("/devCreateUser", async (req, res) => {
-    const hashedPassword = await encryption.hashPassword(req.body.userDetail.password);
-
-    const connection = await createConnection();
-
-    connection.run(`INSERT INTO users ('username', 'password', 'email', 'member_number') VALUES (?, ?, ?, ?)`, [req.body.userDetail.username, hashedPassword, req.body.userDetail.email, req.body.userDetail.memberNumber]);
-    connection.close();
-    res.status(201).send({ message: `Added username '${req.body.userDetail.username}'` });
-});*/
-
 router.post("/logout", (req, res) => {
-    //TODO: Change to POST request - as it changes server state
     const result = req.userMap.delete(req.session.id);
     if (result) {
         res.status(200).send({ message: "Successfully logged out" });
@@ -65,14 +62,6 @@ router.post("/logout", (req, res) => {
             message: "Could not find user or not logged in",
         });
     }
-});
-
-router.get("/getUserProfiles", async (req, res) => {
-    const connection = await createConnection();
-    const users = await connection.all(`SELECT id, username, email, member_number FROM users`);
-    connection.close();
-
-    res.send(users);
 });
 
 /* Module exports */
