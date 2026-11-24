@@ -2,14 +2,14 @@ import { createConnection } from "./connectSqlite.js";
 
 (async () => {
     const connection = await createConnection();
-    
+
     await connection.exec("DROP TABLE IF EXISTS user_emails");
     await connection.exec("DROP TABLE IF EXISTS users");
     await connection.exec("DROP TABLE IF EXISTS messages");
     await connection.exec("DROP TABLE IF EXISTS posts");
     await connection.exec("DROP TABLE IF EXISTS requests");
     await connection.exec("DROP TABLE IF EXISTS emails");
-    
+
     const usersTableSchema = `
         CREATE TABLE users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
