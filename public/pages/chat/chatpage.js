@@ -36,7 +36,6 @@ async function init2() {
         if (input.value) {
             socket.emit("chat message", {
                 message: input.value,
-                sessionId: socket.sessionid,
             });
             input.value = "";
         }
