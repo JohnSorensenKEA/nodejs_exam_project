@@ -9,19 +9,19 @@ document.getElementById("send-btn").addEventListener("click", () => {
         return;
     };
 
-    const subject = document.getElementById("title").value;
+    const subject = document.getElementById("email-subject-input").value;
     if (subject == "") {
         alert("Please add a subject");
         return;
     };
 
-    const body = document.getElementById("message").value;
+    const body = document.getElementById("email-body").value;
     if (body == "") {
         alert("Please add a message");
         return;
     }
 
-    fetch("/api/contact", {
+    fetch("/api/email/newEmail", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -32,8 +32,8 @@ document.getElementById("send-btn").addEventListener("click", () => {
     }).then((response) => {
         if (response.status == 201) {
             alert("Succesfully sent email(s)");
-            document.getElementById("title").value = "";
-            document.getElementById("message").value = "";
+            document.getElementById("email-subject-input").value = "";
+            document.getElementById("email-body").value = "";
         } else if (response.status == 500) {
         } else if (response.status == 503) {
         }
@@ -58,7 +58,7 @@ fetch("/getUserProfiles")
             checkbox.name = "users";
 
             const span = document.createElement("span");
-            span.innerText = profile.username;
+            span.innerText = profile.username + " (" + profile.member_number + ") - " + profile.email;
 
             label.appendChild(checkbox);
             label.appendChild(span);
