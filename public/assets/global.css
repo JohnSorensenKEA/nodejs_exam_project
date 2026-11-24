@@ -75,11 +75,27 @@ html {
     font-size: small;
     align-self: flex-end;
 }
+#email-subject-input {
+    width: 80%;
+    background-color: #f4f4f4;
+}
+#email-body {
+    width: 100%;
+    min-height: 150px;
+    padding: 12px 16px;
+    font-size: 15px;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    border: 1px solid black;
+    border-radius: 6px;
+    resize: vertical;
+}
 #user-list {
     height: 100px;
     overflow-y: auto;
     border: 1px solid black;
     padding: 4px;
+    max-width: 400px;
 }
 #user-list .user-row {
     display: flex;
@@ -163,4 +179,62 @@ html {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+}
+.email-view-button-div {
+    width: 100%;
+}
+#email-view-delete-button {
+    float: right;
+    text-align: right;
+}
+.email-view {
+    width: 100%;
+    margin: 24px auto;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid black;
+    border-radius: 8px;
+    color: #1a1a1a;
+    line-height: 1.6;
+}
+#email-view-subject {
+    margin: 0 0 4px;
+    font-size: 20px;
+    font-weight: 600;
+}
+#email-view-datetime {
+    display: block;
+    font-size: 13px;
+    color: #868686;
+    margin-bottom: 12px;
+}
+#email-view-recipients {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #dfdfdf;
+}
+.to-label {
+    font-size: 13px;
+}
+.email-recipient {
+    font-size: 12px;
+    border-radius: 12px;
+    padding: 3px 10px;
+    color: #494949;
+    background-color: #ebebeb;
+}
+#email-view-system-message {
+    font-size: 13px;
+    border-radius: 4px;
+    margin: 16px 0px;
+    padding: 10px 14px;
+    background: #edebe5;
+}
+#email-view-body {
+    font-size: 15px;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
