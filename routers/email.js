@@ -20,27 +20,54 @@ const transporter = nodemailer.createTransport({
 });
 
 /* Endpoints */
+router.get("/api/email/getEmails", async (req, res) => {
+    const connection = await createConnection();
+
+    const emails = await connection.all(
+        `SELECT e.id, e.subject, e.body, e.system_message, e.created_at, COUNT(ue.email_id) AS reference_count 
+        FROM emails e
+        LEFT JOIN user_emails ue ON ue.email_id = e.id
+        GROUP BY e.id
+        ORDER BY e.id DESC`,
+    );
+    connection.close();
+    res.status(200).send(emails);
+});
+
+router.get("/api/email/getEmail/:id", async (req, res) => {
+    const connection = await createConnection();
+
+    email = await connection.get(
+        `SELECT e.id, e.subject, e.body, e.system_message, e.created_at, COUNT(ue.email_id) AS reference_count 
+        FROM emails e
+        LEFT JOIN user_emails ue ON ue.email_id = e.id
+        WHERE id = ?
+        GROUP BY e.id`,
+        [req.params.id],
+    );
+    connection.close();
+    res.status(200).send(email);
+});
+
 router.post("/api/contact", async (req, res) => {
     res.status(201);
     const connection = await createConnection();
     let systemMessage = "[system: email]";
 
     try {
-        const emails = await connection.all(
+        const email = await connection.get(
             `INSERT INTO emails ('subject', 'body', 'system_message')
             VALUES (?, ?, ?)
             RETURNING *`,
             [escapeHTML(req.body.title), escapeHTML(req.body.message), ""],
         );
-        const email = emails[0];
 
         for (const id of req.body.userIds) {
-            const users = await connection.all(
+            const user = await connection.get(
                 `SELECT id, email FROM users
                 WHERE id = ?`,
                 [id],
             );
-            const user = users[0];
             if (user == undefined) {
                 systemMessage += `\nUnknown user [id: ${id}]`;
                 continue;
@@ -84,6 +111,19 @@ router.post("/api/contact", async (req, res) => {
     } finally {
         connection.close();
     }
+});
+
+router.delete("/api/email/deleteEmail", async (req, res) => {
+    const connection = await createConnection();
+
+    await connection.run(
+        `DELETE FROM emails 
+        WHERE id = ?`,
+        [req.body.id],
+    );
+    connection.close();
+
+    res.sendStatus(200);
 });
 
 /* Module exports */
