@@ -7,13 +7,13 @@ document.getElementById("send-btn").addEventListener("click", () => {
     if (checkedIds.length == 0) {
         alert("Please select one or more recipients");
         return;
-    };
+    }
 
     const subject = document.getElementById("email-subject-input").value;
     if (subject == "") {
         alert("Please add a subject");
         return;
-    };
+    }
 
     const body = document.getElementById("email-body").value;
     if (body == "") {
@@ -58,7 +58,12 @@ fetch("/getUserProfiles")
             checkbox.name = "users";
 
             const span = document.createElement("span");
-            span.innerText = profile.username + " (" + profile.member_number + ") - " + profile.email;
+            span.innerText =
+                profile.username +
+                " (" +
+                profile.member_number +
+                ") - " +
+                profile.email;
 
             label.appendChild(checkbox);
             label.appendChild(span);
