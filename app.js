@@ -132,6 +132,16 @@ const emailPage = createPage("email/emailpage.html", {
     scriptTag: `<script src="../pages/email/emailpage.js" defer></script>`,
 });
 
+const emailsPage = createPage("email/emailspage.html", {
+    title: "Community | Email",
+    scriptTag: `<script src="../pages/email/emailspage.js" defer></script>`,
+});
+
+const newemailPage = createPage("email/newemailpage.html", {
+    title: "Community | Email",
+    scriptTag: `<script src="../pages/email/newemailpage.js" defer></script>`,
+});
+
 const fileManagerPage = createPage("files_manager/filesmanagerpage.html", {
     title: "Community | Files",
     scriptTag: `<script src="../pages/files_manager/filesmanagerpage.js"></script>`,
@@ -176,6 +186,22 @@ app.get("/email", (req, res) => {
         res.redirect("/login");
     } else {
         res.send(emailPage);
+    }
+});
+
+app.get("/emails", (req, res) => {
+    if (!req.userAuth) {
+        res.redirect("/login");
+    } else {
+        res.send(emailsPage);
+    }
+});
+
+app.get("/newemail", (req, res) => {
+    if (!req.userAuth) {
+        res.redirect("/login");
+    } else {
+        res.send(newemailPage);
     }
 });
 
