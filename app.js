@@ -96,7 +96,7 @@ import chatRouter from "./routers/chat.js";
 import pinboardRouter from "./routers/pinboard.js";
 import usersRouter from "./routers/users.js";
 import emailRouter from "./routers/email.js";
-import requestsRouter from "./routers/requests.js"
+import requestsRouter from "./routers/requests.js";
 
 app.use(chatRouter);
 app.use(pinboardRouter);
