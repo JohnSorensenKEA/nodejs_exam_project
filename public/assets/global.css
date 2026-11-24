@@ -73,3 +73,16 @@ html {
     font-size: small;
     align-self: flex-end;
 }
+#user-list {
+    height: 100px;
+    overflow-y: auto;
+    border: 1px solid black;
+    padding: 4px;
+}
+#user-list .user-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 6px;
+    cursor: pointer;
+}
