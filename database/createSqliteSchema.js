@@ -2,11 +2,14 @@ import { createConnection } from "./connectSqlite.js";
 
 (async () => {
     const connection = await createConnection();
-
+    
+    await connection.exec("DROP TABLE IF EXISTS user_emails");
     await connection.exec("DROP TABLE IF EXISTS users");
     await connection.exec("DROP TABLE IF EXISTS messages");
     await connection.exec("DROP TABLE IF EXISTS posts");
-
+    await connection.exec("DROP TABLE IF EXISTS requests");
+    await connection.exec("DROP TABLE IF EXISTS emails");
+    
     const usersTableSchema = `
         CREATE TABLE users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -43,9 +46,45 @@ import { createConnection } from "./connectSqlite.js";
         )
     `;
 
+    const requestsTableSchema = `
+        CREATE TABLE requests (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email TEXT NOT NULL,
+            title TEXT NOT NULL,
+            message TEXT NOT NULL
+        )
+    `;
+
+    const emailsTableSchema = `
+        CREATE TABLE emails (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            subject TEXT NOT NULL,
+            body TEXT NOT NULL,
+            system_message TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        )
+    `;
+
+    const userEmailsTableSchema = `
+        CREATE TABLE user_emails (
+            user_id INT,
+            email_id INT,
+            PRIMARY KEY (user_id, email_id),
+            FOREIGN KEY (user_id) 
+                REFERENCES users(id),
+            FOREIGN KEY (email_id)
+                REFERENCES emails(id)
+                    ON DELETE CASCADE
+                    ON UPDATE NO ACTION
+        )
+    `;
+
     await connection.exec(usersTableSchema);
     await connection.exec(messagesTableSchema);
     await connection.exec(postsTableSchema);
+    await connection.exec(requestsTableSchema);
+    await connection.exec(emailsTableSchema);
+    await connection.exec(userEmailsTableSchema);
 
     await connection.close();
 })();
