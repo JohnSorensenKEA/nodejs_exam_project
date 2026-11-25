@@ -1,6 +1,9 @@
 function init() {
     document.getElementById("logout-a").addEventListener("click", function () {
-        fetch("/logout")
+        fetch("/logout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+        })
             .then((response) => response.json())
             .then((data) => {
                 alert(data.message);
